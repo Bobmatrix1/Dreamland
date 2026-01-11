@@ -63,20 +63,19 @@ export function Dashboard() {
   };
 
   const handleInstall = async () => {
-    if (!canInstall) {
-      toast.info("Tap the browser menu (⋮) or Share button and select 'Install App' or 'Add to Home Screen'", {
-        duration: 5000
-      });
-      return;
-    }
-
     setShowInstallModal(false);
-    const success = await install();
-    if (success) {
-      toast.success("App installed successfully!");
-    } else if (import.meta.env.DEV) {
-      toast.info("PWA install is only available in production builds. Build and deploy to test!", {
-        duration: 5000
+    
+    // If the browser has captured the install prompt (Android/Desktop Chrome)
+    if (canInstall) {
+      const success = await install();
+      if (success) {
+        toast.success("App installed successfully!");
+      }
+    } else {
+      // iOS or Browser didn't fire the prompt (Manual Install)
+      toast.info("To install: Tap Share/Menu button → 'Add to Home Screen'", {
+        duration: 8000, // Show longer so they can read it
+        icon: <Download size={16} />
       });
     }
   };
