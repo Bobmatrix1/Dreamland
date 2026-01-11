@@ -1,4 +1,4 @@
-const CACHE_NAME = 'dreamland-v3';
+const CACHE_NAME = 'dreamland-v4';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -32,21 +32,25 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Navigation requests (HTML): Network First
+  // Navigation requests (HTML): Network First, Fallback to App Shell
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
-          // Update cache with new version
+          // Update cache with new version of the page
           const responseClone = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
+            // We only need to cache index.html for navigation really, 
+            // but caching the specific request is fine too.
+            // However, to keep it clean for SPA, we usually rely on the shell.
             cache.put(event.request, responseClone);
           });
           return response;
         })
         .catch(() => {
-          // Fallback to cache if offline
-          return caches.match(event.request);
+          // CRITICAL FIX: Always return index.html (App Shell) for navigation
+          // This allows the router to handle /dashboard, /chat, etc.
+          return caches.match('/index.html');
         })
     );
     return;
