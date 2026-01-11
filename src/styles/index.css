@@ -1,0 +1,5 @@
+@import './fonts.css';
+@import './tailwind.css';
+@import './theme.css';
+
+.pb-safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
