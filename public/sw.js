@@ -1,17 +1,19 @@
-// Service Worker for PWA
 const CACHE_NAME = 'dreamland-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/logo.jpg'
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
+      .then((cache) => {
+        return cache.addAll(urlsToCache);
+      })
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('fetch', (event) => {

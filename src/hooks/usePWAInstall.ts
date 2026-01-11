@@ -5,25 +5,11 @@ export function usePWAInstall() {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    // Service worker registration - only works in production builds
-    // In development, PWA features are simulated
-    const isDev = import.meta.env.DEV;
-    
-    if ('serviceWorker' in navigator && !isDev) {
-      // Only register in production
-      navigator.serviceWorker.register('/sw.js', { scope: '/' })
-        .then(registration => {
-          console.log('✅ Service Worker registered:', registration.scope);
-        })
-        .catch(error => {
-          console.warn('⚠️ Service Worker registration failed:', error.message);
-        });
-    }
-
     // Listen for install prompt
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       setInstallPrompt(e);
+      console.log('✅ PWA Install Prompt captured!');
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
@@ -40,11 +26,7 @@ export function usePWAInstall() {
 
   const install = async () => {
     if (!installPrompt) {
-      // Show helpful message in development
-      if (import.meta.env.DEV) {
-        console.log('ℹ️ PWA install is only available in production builds or when served over HTTPS');
-        return false;
-      }
+      console.log('❌ No install prompt available');
       return false;
     }
 
