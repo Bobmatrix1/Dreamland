@@ -37,9 +37,7 @@ export function Dashboard() {
   // Show install modal when available and not already installed
   useEffect(() => {
     if (canInstall && !isInstalled) {
-      // Small delay to not overwhelm the user immediately
-      const timer = setTimeout(() => setShowInstallModal(true), 3000);
-      return () => clearTimeout(timer);
+      setShowInstallModal(true);
     }
   }, [canInstall, isInstalled]);
 
