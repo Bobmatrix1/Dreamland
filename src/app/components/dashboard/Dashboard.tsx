@@ -34,12 +34,12 @@ export function Dashboard() {
     setSidebarOpen(!isMobile);
   }, [isMobile]);
 
-  // Show install modal when available and not already installed
+  // Show install modal immediately if not installed
   useEffect(() => {
-    if (canInstall && !isInstalled) {
+    if (!isInstalled) {
       setShowInstallModal(true);
     }
-  }, [canInstall, isInstalled]);
+  }, [isInstalled]);
 
   const isAdmin = authContext?.user?.role === USER_ROLES.ADMIN;
 
@@ -63,6 +63,13 @@ export function Dashboard() {
   };
 
   const handleInstall = async () => {
+    if (!canInstall) {
+      toast.info("Tap the browser menu (⋮) or Share button and select 'Install App' or 'Add to Home Screen'", {
+        duration: 5000
+      });
+      return;
+    }
+
     setShowInstallModal(false);
     const success = await install();
     if (success) {
@@ -136,9 +143,9 @@ export function Dashboard() {
               initial={{ x: -300 }}
               animate={{ x: 0 }}
               exit={{ x: -300 }}
-              transition={{ type: "spring", damping: 20 }}
+              transition={{ type: "tween", duration: 0.3, ease: "easeInOut" }}
               className={`
-                w-64 p-4 flex flex-col gap-4
+                w-64 p-4 flex flex-col gap-4 will-change-transform
                 ${isMobile ? 'absolute inset-y-0 left-0 z-50 h-full' : 'relative'}
               `}
             >
