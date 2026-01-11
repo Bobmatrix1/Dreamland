@@ -28,17 +28,31 @@ export function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const { install, canInstall, isInstalled } = usePWAInstall();
+  const [hasCheckedInstall, setHasCheckedInstall] = useState(false);
 
   // Sync sidebar state with screen size changes
   useEffect(() => {
     setSidebarOpen(!isMobile);
   }, [isMobile]);
 
-  // Show install modal immediately if not installed
+  // Show install modal logic
   useEffect(() => {
-    if (!isInstalled) {
-      setShowInstallModal(true);
-    }
+    // If already installed, never show
+    if (isInstalled) return;
+    
+    // If we already showed it this session, don't show again
+    if (sessionStorage.getItem('installModalShown')) return;
+
+    // Wait a bit to be sure of install state
+    const timer = setTimeout(() => {
+        setHasCheckedInstall(true);
+        if (!isInstalled) {
+            setShowInstallModal(true);
+            sessionStorage.setItem('installModalShown', 'true');
+        }
+    }, 2000);
+    
+    return () => clearTimeout(timer);
   }, [isInstalled]);
 
   const isAdmin = authContext?.user?.role === USER_ROLES.ADMIN;
@@ -65,16 +79,31 @@ export function Dashboard() {
   const handleInstall = async () => {
     setShowInstallModal(false);
     
-    // If the browser has captured the install prompt (Android/Desktop Chrome)
+    // Safety timeout: If browser takes too long, show manual instructions
+    let promptOpened = false;
+    const safetyTimer = setTimeout(() => {
+        if (!promptOpened) {
+            toast.info("If no popup appeared: Tap Menu (⋮) → 'Install App'", { duration: 5000 });
+        }
+    }, 1000);
+
+    // If the browser has captured the install prompt
     if (canInstall) {
-      const success = await install();
-      if (success) {
-        toast.success("App installed successfully!");
+      try {
+          promptOpened = true; // Assume it works if we get here
+          const success = await install();
+          clearTimeout(safetyTimer);
+          if (success) {
+            toast.success("App installed successfully!");
+          }
+      } catch (e) {
+          console.error("Install failed", e);
       }
     } else {
-      // iOS or Browser didn't fire the prompt (Manual Install)
+      // Manual Install Instructions
+      clearTimeout(safetyTimer);
       toast.info("To install: Tap Share/Menu button → 'Add to Home Screen'", {
-        duration: 8000, // Show longer so they can read it
+        duration: 8000,
         icon: <Download size={16} />
       });
     }

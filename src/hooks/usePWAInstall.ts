@@ -14,9 +14,14 @@ export function usePWAInstall() {
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
 
-    // Check if already installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone === true;
+    // Check if already installed (Robust Check)
+    const isStandalone = 
+      window.matchMedia('(display-mode: standalone)').matches || 
+      (navigator as any).standalone === true ||
+      window.location.search.includes('source=pwa');
+
     if (isStandalone) {
+      console.log("App is running in standalone mode");
       setIsInstalled(true);
     }
 

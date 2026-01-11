@@ -29,35 +29,30 @@
             color: white;
             font-family: system-ui, -apple-system, sans-serif;
           }
-          .loader-logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            margin-bottom: 24px;
-            object-fit: cover;
-          }
-          .loader-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-          }
-          @keyframes spin {
-            to { transform: rotate(360deg); }
-          }
-        </style>
-      </head>
-    
-      <body>
-        <div id="root">
-          <div class="initial-loader">
-            <img src="/logo.jpg" alt="Dreamland" class="loader-logo" />
-            <div class="loader-spinner"></div>
-          </div>
-        </div>
-        <script type="module" src="/src/main.tsx"></script>
-      </body>  </html>
+                .loader-logo {
+                  width: 80px;
+                  height: 80px;
+                  border-radius: 20px;
+                  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 40px;
+                  font-weight: bold;
+                  color: white;
+                  margin-bottom: 24px;
+                  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                }
+              </style>
+            </head>
+          
+            <body>
+              <div id="root">
+                <div class="initial-loader">
+                  <div class="loader-logo">D</div>
+                  <div class="loader-spinner"></div>
+                </div>
+              </div>
+              <script type="module" src="/src/main.tsx"></script>
+            </body>  </html>
   
