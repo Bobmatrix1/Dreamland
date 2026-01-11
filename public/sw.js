@@ -1,8 +1,10 @@
-const CACHE_NAME = 'dreamland-v2';
+const CACHE_NAME = 'dreamland-v3';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/icon-192.png',
+  '/icon-512.png',
   '/logo.jpg'
 ];
 

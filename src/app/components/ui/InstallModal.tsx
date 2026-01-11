@@ -32,9 +32,11 @@ export function InstallModal({ isOpen, onInstall, onClose }: InstallModalProps) 
               </button>
 
               <div className="flex flex-col items-center text-center mt-2">
-                <div className="w-16 h-16 mb-4 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
-                  <Download className="text-white w-8 h-8" />
-                </div>
+                <img 
+                  src="/icon-192.png" 
+                  alt="App Icon" 
+                  className="w-20 h-20 mb-4 rounded-2xl shadow-lg"
+                />
                 
                 <h3 className="text-xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                   Install Dreamland
