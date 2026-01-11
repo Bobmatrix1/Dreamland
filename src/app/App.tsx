@@ -178,6 +178,29 @@ function App() {
     setUser(prev => prev ? ({ ...prev, ...data }) : null);
   };
 
+  useEffect(() => {
+    const handleSWUpdate = () => {
+      toast.info("New version available!", {
+        action: {
+          label: "Refresh",
+          onClick: () => {
+            // Send message to SW to skip waiting
+            if (navigator.serviceWorker.controller) {
+               // We can just reload, because our SW calls skipWaiting() in 'install'
+               // But to be safe, a simple reload usually fetches the new SW if configured correctly.
+               // Since our SW has self.skipWaiting() in install, it activates immediately.
+               window.location.reload();
+            }
+          }
+        },
+        duration: Infinity // Keep it open until clicked
+      });
+    };
+
+    window.addEventListener('sw-update-found', handleSWUpdate);
+    return () => window.removeEventListener('sw-update-found', handleSWUpdate);
+  }, []);
+
   if (loading) {
     return (
       <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500">

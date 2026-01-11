@@ -90,10 +90,10 @@ export function Dashboard() {
       />
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => (
+        {[...Array(5)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10"
+            className="absolute rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 will-change-transform"
             style={{
               width: Math.random() * 200 + 100,
               height: Math.random() * 200 + 100,
@@ -124,7 +124,7 @@ export function Dashboard() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSidebarOpen(false)}
-              className="absolute inset-0 z-40 bg-black/50 backdrop-blur-sm"
+              className="absolute inset-0 z-40 bg-black/80"
             />
           )}
         </AnimatePresence>
@@ -142,7 +142,7 @@ export function Dashboard() {
                 ${isMobile ? 'absolute inset-y-0 left-0 z-50 h-full' : 'relative'}
               `}
             >
-              <GlassCard className="p-4 flex-1 flex flex-col overflow-hidden bg-background/80 backdrop-blur-xl md:bg-transparent md:backdrop-blur-none">
+              <GlassCard className="p-4 flex-1 flex flex-col overflow-hidden bg-background md:bg-transparent md:backdrop-blur-none">
                 <div className="flex items-center justify-between mb-6 shrink-0">
                   <div className="flex items-center gap-3">
                     <img 

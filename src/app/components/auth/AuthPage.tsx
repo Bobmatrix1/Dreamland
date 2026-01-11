@@ -51,10 +51,10 @@ export function AuthPage() {
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute rounded-full bg-white/10"
+            className="absolute rounded-full bg-white/10 will-change-transform"
             style={{
               width: Math.random() * 100 + 50,
               height: Math.random() * 100 + 50,
