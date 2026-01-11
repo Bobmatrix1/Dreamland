@@ -10,6 +10,7 @@ import { StorageView } from "../storage/StorageView";
 import { SettingsView } from "../settings/SettingsView";
 import { FindFriendsView } from "../friends/FindFriendsView";
 import { ProfileModal } from "../profile/ProfileModal";
+import { InstallModal } from "../ui/InstallModal";
 import { AuthContext } from "../../App";
 import { usePWAInstall } from "../../../hooks/usePWAInstall";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ export function Dashboard() {
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [selectedProfile, setSelectedProfile] = useState<any>(null);
+  const [showInstallModal, setShowInstallModal] = useState(false);
   const { theme, setTheme } = useTheme();
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
@@ -31,6 +33,15 @@ export function Dashboard() {
   useEffect(() => {
     setSidebarOpen(!isMobile);
   }, [isMobile]);
+
+  // Show install modal when available and not already installed
+  useEffect(() => {
+    if (canInstall && !isInstalled) {
+      // Small delay to not overwhelm the user immediately
+      const timer = setTimeout(() => setShowInstallModal(true), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [canInstall, isInstalled]);
 
   const isAdmin = authContext?.user?.role === USER_ROLES.ADMIN;
 
@@ -54,6 +65,7 @@ export function Dashboard() {
   };
 
   const handleInstall = async () => {
+    setShowInstallModal(false);
     const success = await install();
     if (success) {
       toast.success("App installed successfully!");
@@ -73,6 +85,11 @@ export function Dashboard() {
 
   return (
     <div className="h-[100dvh] w-full overflow-hidden bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-blue-500/20 dark:from-purple-900/20 dark:via-pink-900/20 dark:to-blue-900/20">
+      <InstallModal 
+        isOpen={showInstallModal} 
+        onInstall={handleInstall} 
+        onClose={() => setShowInstallModal(false)} 
+      />
       {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(15)].map((_, i) => (
